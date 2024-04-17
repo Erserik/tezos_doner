@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.db.models import Q
@@ -29,8 +29,12 @@ def search_users(request):
 
 
 def signup(request):
-    if request.method == 'POST':
+    # Проверяем, залогинен ли уже пользователь
+    if request.user.is_authenticated:
+        # Если пользователь залогинен, перенаправляем его на страницу профиля
+        return redirect('users:profile')
 
+    if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -46,9 +50,14 @@ def signup(request):
             )
 
             # Redirect to the user's profile page
+            login(request, user)
             return redirect('users:profile')
     else:
+        # Если пользователь не залогинен, но есть аккаунт, перенаправляем на страницу входа
+        if get_user_model().objects.filter(username=request.POST.get('username')).exists():
+            return redirect('users:signin')
         form = SignUpForm()
+
     return render(request, 'users/signup.html', {'form': form})
 
 
@@ -64,7 +73,6 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
-        print(Change())
         form = LoginForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
