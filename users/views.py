@@ -33,6 +33,7 @@ def signup(request):
 
         form = SignUpForm(request.POST)
         if form.is_valid():
+            print(form.cleaned_data)
             user = form.save()
 
             # Synchronously create blockchain contract
@@ -64,7 +65,6 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
-        print(Change())
         form = LoginForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
