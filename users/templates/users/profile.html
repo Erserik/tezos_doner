@@ -4,11 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: #1a1a2e;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0abab5;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        /* Additional styling for user information */
+        .user-info {
+            color: #ccc;
+        }
+    </style>
 </head>
 <body>
-    <h2>User Profile</h2>
-    <p>Welcome, {{ user.username }}!</p>
-    <p>Email: {{ user.email }}</p>
-    <!-- Add more user information as needed -->
+    <div class="profile-container">
+        <h2>User Profile</h2>
+        <p>Welcome, <span class="user-info">{{ user.username }}</span>!</p>
+        <p>Email: <span class="user-info">{{ user.email }}</span></p>
+        <!-- Add more user information as needed -->
+    </div>
 </body>
 </html>

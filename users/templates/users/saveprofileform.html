@@ -3,14 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
+    <title>User Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: #1a1a2e;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0abab5;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+            background-color: #0a0a16;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0abab5;
+            color: #ffffff;
+            font-size: 16px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #089a9a;
+        }
+
+        ::placeholder {
+            color: #666;
+        }
+
+        input:focus,
+        button:focus {
+            outline: none;
+            border-color: #0abab5;
+        }
+    </style>
 </head>
 <body>
-    <h2>Sign Up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+    <form id="searchForm">
+        <h2>User Search</h2>
+        <label for="query">Search:</label>
+        <input type="text" id="query" name="query" placeholder="Поиск по ИИН" required>
+        <button type="submit">Search</button>
     </form>
+
+    <div id="searchResults">
+        <!-- Search results will be displayed here -->
+    </div>
+
+<script>
+    // Получение элементов формы и поля ввода
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('query');
+    const searchResults = document.getElementById('searchResults');
+
+    // Слушатель события отправки формы
+    searchForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращение стандартной отправки формы
+
+        const query = searchInput.value.trim(); // Получение поискового запроса
+
+        // Отправка GET-запроса на сервер с поисковым запросом
+        fetch(`/search_users?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                displaySearchResults(data.results);
+            })
+            .catch(error => {
+                console.error('Error fetching search results:', error);
+                searchResults.innerHTML = '<p>Error loading results.</p>';
+            });
+    });
+
+    // Функция для отображения результатов поиска
+    function displaySearchResults(results) {
+        // Очистка предыдущих результатов поиска
+        searchResults.innerHTML = '';
+
+        // Проверка на наличие результатов
+        if (results.length === 0) {
+            searchResults.innerHTML = '<p>No results found.</p>';
+            return;
+        }
+
+        // Создание неупорядоченного списка для отображения результатов
+        const resultList = document.createElement('ul');
+
+        // Проход по каждому результату и создание элементов списка
+        results.forEach(result => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Name: ${result.name}, Email: ${result.email}`; // Адаптируйте этот текст к вашему формату вывода
+            resultList.appendChild(listItem);
+        });
+
+        // Добавление списка результатов в div searchResults
+        searchResults.appendChild(resultList);
+    }
+</script>
+
 </body>
 </html>

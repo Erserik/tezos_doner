@@ -1,10 +1,31 @@
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout, get_user_model
+from django.db.models import Q
 from .forms import SignUpForm, LoginForm
 
 from .tezos_func import Change
 
+
+def search_users(request):
+    query = request.GET.get('query', '')
+    if query:
+        users = get_user_model().objects.filter(
+            Q(blockchain_contract_id__icontains=query) |
+            Q(name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(iin_number__icontains=query) |
+            Q(age__icontains=query) |
+            Q(height__icontains=query) |
+            Q(weight__icontains=query) |
+            Q(blood_group__icontains=query) |
+            Q(description__icontains=query)
+        )
+        results = [{'name': user.name, 'last_name': user.last_name, 'email': user.email} for user in users]
+        return JsonResponse({'results': results})
+    else:
+        return JsonResponse({'results': []})
 
 
 def signup(request):
@@ -64,3 +85,9 @@ def signout(request):
 
 def profile(request):
     return render(request, 'users/profile.html')
+
+
+def saveprofile(request):
+    return render(request, 'users/saveprofileform.html')
+
+
