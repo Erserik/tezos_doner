@@ -1,0 +1,11 @@
+{
+    storage string;
+    parameter
+        (string %update_text);
+    code
+        {
+            CAR;
+            NIL operation;
+            PAIR
+        }
+}
