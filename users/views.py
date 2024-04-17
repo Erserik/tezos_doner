@@ -1,15 +1,20 @@
 from django.core.mail import send_mail
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.db.models import Q
 from .forms import SignUpForm, LoginForm
 
 from .tezos_func import Change
 
+def home(request):
+    return render(request, 'users/home.html')
 
 def search_users(request):
     query = request.GET.get('query', '')
+    print("Запрос получен с параметром:", query)  # Отладочная печать
+
     if query:
         users = get_user_model().objects.filter(
             Q(blockchain_contract_id__icontains=query) |
@@ -22,6 +27,7 @@ def search_users(request):
             Q(blood_group__icontains=query) |
             Q(description__icontains=query)
         )
+        print("Найдено пользователей:", len(users))  # Отладочная печать
         results = [{'name': user.name, 'last_name': user.last_name, 'email': user.email} for user in users]
         return JsonResponse({'results': results})
     else:
@@ -54,7 +60,7 @@ def signup(request):
             return redirect('users:profile')
     else:
         # Если пользователь не залогинен, но есть аккаунт, перенаправляем на страницу входа
-        if get_user_model().objects.filter(username=request.POST.get('username')).exists():
+        if get_user_model().objects.filter(username=request.POST.get('name')).exists():
             return redirect('users:signin')
         form = SignUpForm()
 
@@ -77,10 +83,9 @@ def signin(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)  # This authenticates the user and returns a user instance
-
+            user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)  # Log in the user
+                login(request, user)
                 return redirect('users:profile')
     else:
         form = LoginForm()
@@ -89,8 +94,9 @@ def signin(request):
 
 def signout(request):
     logout(request)
-    return redirect('users:signin')
+    return render(request, 'users/home.html')
 
+@login_required
 def profile(request):
     return render(request, 'users/profile.html')
 

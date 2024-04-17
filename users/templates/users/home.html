@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+        }
+
+        .matrix-rain {
+            position: absolute;
+            top: 0;
+            display: block;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-100vh); }
+            to { transform: translateY(100vh); }
+        }
+
+        header {
+            width: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .home-container {
+            position: relative;
+            top: 60px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .button {
+            background-color: #0abab5;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #089a9a;
+        }
+
+        .left-buttons, .right-button {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="left-buttons">
+            <!-- Sign Up button -->
+            <a href="{% url 'users:signup' %}" class="button">Sign Up</a>
+            <!-- Sign In button -->
+            <a href="{% url 'users:signin' %}" class="button">Sign In</a>
+        </div>
+        <div class="right-button">
+            <!-- Profile button (conditionally displayed) -->
+            <a href="{% url 'users:profile' %}" class="button">Profile</a>
+        </div>
+    </header>
+    <div class="home-container">
+        <h2>Welcome to Home Page</h2>
+        <p>Exploring the potential of blockchain technology in donorship programs helps ensure transparency and security in data handling.</p>
+    </div>
+    <script>
+        const body = document.body;
+        const numOfColumns = window.innerWidth / 20;
+
+        for (let i = 0; i < numOfColumns; i++) {
+            const column = document.createElement('div');
+            column.className = 'matrix-rain';
+            column.style.left = `${i * 20}px`;
+            column.style.animation = `fall ${Math.random() * 10 + 5}s linear infinite`;
+            column.textContent = Array.from({length: 100}, () => Math.round(Math.random())).join('');
+            body.appendChild(column);
+        }
+    </script>
+</body>
+</html>
