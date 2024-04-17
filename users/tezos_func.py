@@ -5,6 +5,13 @@ import re
 from datetime import datetime
 import requests
 
+try:
+    response = requests.get('https://www.example.com')
+    print(response.status_code)
+except Exception as e:
+    print(e)
+
+
 def Create():
 
     log_directory = "log"
