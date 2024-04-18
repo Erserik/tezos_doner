@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.db.models import Q
 from .forms import SignUpForm, LoginForm
 
-from .tezos_func import Change
+from .tezos_func import Create_manual, Change
 
 def home(request):
     return render(request, 'users/home.html')
@@ -43,9 +43,21 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            print(form.cleaned_data['age'])
+            print(form.cleaned_data['height'])
+            print(form.cleaned_data['weight'])
+            print(form.cleaned_data['blood_group'])
+            print(form.cleaned_data['description'])
+            contract = Create_manual()
+            print('#' + contract + '#')
+            text = 'age:' + str(form.cleaned_data['age']) + ' height:' + str(form.cleaned_data['height']) + ' weight:' + str(form.cleaned_data['weight']) + ' blood group:' + str(form.cleaned_data['blood_group']) + ' description:' + str(form.cleaned_data['description'])
+            Change(contract, text)
 
-            # Synchronously create blockchain contract
+            user = form.save()
+            user.blockchain_contract_id = contract
+            user.save()
+
+            # Synchronously create blockchain contract.txt
             # Send welcome email
             send_mail(
                 'Welcome to Our Site',
@@ -54,6 +66,7 @@ def signup(request):
                 [user.email],
                 fail_silently=False,
             )
+
 
             # Redirect to the user's profile page
             login(request, user)

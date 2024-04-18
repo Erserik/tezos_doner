@@ -3,7 +3,7 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    # Add a field to store the contract ID
+    # Add a field to store the contract.txt ID
 
     blockchain_contract_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
