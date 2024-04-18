@@ -41,40 +41,42 @@
             color: #ccc;
         }
 
-        .logout-button, .home-button {
-            background-color: #0abab5;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-        }
+ .logout-button, .home-button {
+    background-color: #0abab5;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap; /* Запрещаем перенос текста на новую строку */
+}
 
-        .logout-button:hover, .home-button:hover {
-            background-color: #089a9a;
-        }
+.logout-button:hover, .home-button:hover {
+    background-color: #089a9a;
+}
 
-        .home-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px; /* Скопированный размер кнопки */
+}
 
-        .logout-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: auto;
-        }
+.logout-button {
+    position: absolute;
+    top: 0px;
+    right: 4px;
+    padding: 15px 20px; /* Используем тот же размер, что и у кнопки "Home" */
+}
+
     </style>
 </head>
 <body>
     <a href="{% url 'users:home' %}" class="home-button">Home</a>
     <div class="profile-container">
         <h2>User Profile</h2>
-        <p>First Name: <span class="user-info">{{ user.first_name }}</span></p>
+        <p>First Name: <span class="user-info">{{ user.name }}</span></p>
         <p>Last Name: <span class="user-info">{{ user.last_name }}</span></p>
         <p>Email: <span class="user-info">{{ user.email }}</span></p>
         <p>IIN Number: <span class="user-info">{{ user.iin_number }}</span></p>
@@ -83,6 +85,7 @@
         <p>Weight: <span class="user-info">{{ user.weight }} kg</span></p>
         <p>Blood Group: <span class="user-info">{{ user.blood_group }}</span></p>
         <p>Description: <span class="user-info">{{ user.description }}</span></p>
+        <p>Blockchain <a href="https://better-call.dev/mainnet/KT1R7tdBSbUzoYDNcuXc8wR1AhcXReTSKMeR/operations">GO</a></p>
     </div>
     <!-- Logout button -->
     <form action="{% url 'users:signout' %}" method="post" style="position: absolute; top: 20px; right: 20px;">
