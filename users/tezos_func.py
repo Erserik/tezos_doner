@@ -1,15 +1,12 @@
 import subprocess
-import logging
+
 import os
 import re
 from datetime import datetime
 import requests
+from django.conf import settings
+import logging
 
-try:
-    response = requests.get('https://www.example.com')
-    print(response.status_code)
-except Exception as e:
-    print(e)
 
 
 def Create():
@@ -24,10 +21,10 @@ def Create():
 
     # Define the command as a multi-line string
     command = """
-        octez-client --endpoint https://mainnet.smartpy.io originate contract contract_edf68f2affb9b99af1737129 \
+        octez-client --endpoint https://mainnet.smartpy.io originate contract.txt contract_edf68f2affb9b99af1737129 \
         transferring 0 \
         from doner \
-        running contract.tz \
+        running contract.txt.tz \
         --init '""' \
         --fee 0.0015 \
         --gas-limit 10600 \
@@ -47,8 +44,8 @@ def Create():
     output = process.stdout if process.stdout else process.stderr
     logging.info("Output: %s", output)
 
-    # Regex to find the contract ID following "Originated contracts:"
-    contract_id = "No contract ID found"
+    # Regex to find the contract.txt ID following "Originated contracts:"
+    contract_id = "No contract.txt ID found"
     match = re.search(r"Originated contracts:\s+(KT1\w+)", output)
     if match:
         contract_id = match.group(1)
@@ -58,15 +55,14 @@ def Create():
 
 
 
-def Change(contract_id,text):
-
-    command = '''octez-client -E https://mainnet.api.tez.ie transfer 0 from doner to ''' + contract_id + ''' --entrypoint update_text --arg '" ''' + text + ''' "' --burn-cap 0.1'''
+def Change(contract_id, text):
+    command = f'''octez-client -E https://mainnet.api.tez.ie transfer 0 from doner to {contract_id} --entrypoint update_text --arg '"{text}"' --burn-cap 0.1'''
     process = subprocess.run(command, shell=True, text=True, capture_output=True)
     if process.returncode == 0:
         logging.info("Command executed successfully!")
     else:
-        logging.error("Error executing command:")
-    return process.returncode
+        logging.error("Error executing command: %s", process.stderr)
+    return process.stderr if process.stderr else process.stdout
 
 def Read(contract_address):
     base_url = "https://api.tzkt.io/v1/contracts"
@@ -77,7 +73,30 @@ def Read(contract_address):
     else:
         return f"Failed to retrieve data: {response.status_code}"
 
-# Example contract address
-contract_address = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-storage = Read(contract_address)
-print(storage)
+def Create_manual():
+    # Path to the text file
+    file_path = os.path.join(settings.BASE_DIR, 'contract.txt')
+
+    # Read all contract.txt IDs into a list
+    with open(file_path, 'r') as file:
+        contracts = file.readlines()
+
+    # Check if there are any contract.txt IDs available
+    if not contracts:
+        return "No contracts available to assign"
+
+    # Strip any whitespace characters like `\n` at the end of each line
+    contracts = [contract.strip() for contract in contracts]
+
+    # Take the first contract.txt ID
+    assigned_contract = contracts.pop(0)
+
+    # Write the remaining contracts back to the file
+    with open(file_path, 'w') as file:
+        for contract in contracts:
+            file.write(contract + '\n')
+
+    # Return the assigned contract.txt ID
+    return assigned_contract
+
+Change('KT1UxdicHgv8YnAhq279CQBwFcq2EJxd6Bwh', 'dsfdsfdsfsd')
