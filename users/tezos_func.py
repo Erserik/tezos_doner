@@ -20,16 +20,14 @@ def Create():
     logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     # Define the command as a multi-line string
-    command = """
-        octez-client --endpoint https://mainnet.smartpy.io originate contract.txt contract_edf68f2affb9b99af1737129 \
-        transferring 0 \
-        from doner \
-        running contract.txt.tz \
-        --init '""' \
-        --fee 0.0015 \
-        --gas-limit 10600 \
-        --storage-limit 496 --force
-        """
+    command = """octez-client --endpoint https://mainnet.smartpy.io originate contract contract_edf68f2affb9b99af1737129 \
+                transferring 0 \
+                from doner \
+                running contract.tz \
+                --init '""' \
+                --fee 0.0015 \
+                --gas-limit 10600 \
+                --storage-limit 496 --force"""
 
     # Execute the command using subprocess
     process = subprocess.run(command, shell=True, text=True, capture_output=True)
@@ -50,7 +48,7 @@ def Create():
     if match:
         contract_id = match.group(1)
 
-    return contract_id
+    return contract_id , process.stderr if process.stderr else process.stdout
 
 
 
@@ -99,4 +97,5 @@ def Create_manual():
     # Return the assigned contract.txt ID
     return assigned_contract
 
-Change('KT1UxdicHgv8YnAhq279CQBwFcq2EJxd6Bwh', 'dsfdsfdsfsd')
+
+print(Create())

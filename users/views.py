@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.db.models import Q
 from .forms import SignUpForm, LoginForm
 
-from .tezos_func import Create_manual, Change
+from .tezos_func import Create_manual, Change, Create
 
 def home(request):
     return render(request, 'users/home.html')
@@ -43,6 +43,7 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
+            print(Create())
             print(form.cleaned_data['age'])
             print(form.cleaned_data['height'])
             print(form.cleaned_data['weight'])

@@ -7,7 +7,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email','first_name', 'last_name', 'iin_number','age','height','weight','blood_group','description', 'password1', 'password2')
+        fields = ('username', 'email','name', 'last_name', 'iin_number','age','height','weight','blood_group','description', 'password1', 'password2')
 
 # class SaveProfileForm(forms.ModelForm):
 #     class Meta:
