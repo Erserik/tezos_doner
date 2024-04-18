@@ -12,6 +12,9 @@
             height: 100vh;
             background: #000;
             color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .matrix-rain {
@@ -62,6 +65,7 @@
             padding: 10px 20px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-left: 10px; /* Добавляем небольшое пространство между кнопками */
         }
 
         .button:hover {
@@ -76,14 +80,17 @@
 <body>
     <header>
         <div class="left-buttons">
-            <!-- Sign Up button -->
-            <a href="{% url 'users:signup' %}" class="button">Sign Up</a>
-            <!-- Sign In button -->
-            <a href="{% url 'users:signin' %}" class="button">Sign In</a>
+            <!-- Profile button (conditionally displayed) -->
+            {% if user.is_authenticated %}
+            <a href="{% url 'users:profile' %}" class="button">Profile</a>
+            {% endif %}
         </div>
         <div class="right-button">
-            <!-- Profile button (conditionally displayed) -->
-            <a href="{% url 'users:profile' %}" class="button">Profile</a>
+            <!-- Sign Up and Sign In buttons (conditionally displayed) -->
+            {% if not user.is_authenticated %}
+            <a href="{% url 'users:signup' %}" class="button">Sign Up</a>
+            <a href="{% url 'users:signin' %}" class="button">Sign In</a>
+            {% endif %}
         </div>
     </header>
     <div class="home-container">
