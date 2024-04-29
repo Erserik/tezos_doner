@@ -83,6 +83,7 @@
 
     #searchResults {
         text-align: center;
+        margin-top: 10px;
     }
 
     #searchResults ul {
@@ -129,25 +130,53 @@
             });
     });
 
-    function displaySearchResults(results) {
-        searchResults.innerHTML = '';
+   function displaySearchResults(results) {
+    searchResults.innerHTML = '';
 
-        if (results.length === 0) {
-            searchResults.innerHTML = '<p>No results found.</p>';
-            return;
-        }
-
-        const resultList = document.createElement('ul');
-
-        results.forEach(result => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Name: ${result.name}, Email: ${result.email}`;
-            resultList.appendChild(listItem);
-        });
-
-        searchResults.appendChild(resultList);
-
+    if (results.length === 0) {
+        searchResults.innerHTML = '<p>No results found.</p>';
+        return;
     }
+
+    const resultList = document.createElement('ul');
+
+    results.forEach(result => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `Name: ${result.name}, Blood_group: ${result.blood_group}`;
+
+        const inviteButton = document.createElement('button');
+        inviteButton.textContent = 'Invite';
+        inviteButton.onclick = function() {
+            sendInvitation(result.email);
+        };
+
+        listItem.appendChild(inviteButton);
+        resultList.appendChild(listItem);
+    });
+
+    searchResults.appendChild(resultList);
+}
+
+function sendInvitation(email) {
+    const date = prompt("Please enter a date for the appointment (YYYY-MM-DD):");
+    const time = prompt("Please enter a time for the appointment (HH:MM):");
+
+    if (!date || !time) {
+        alert("You must specify both date and time.");
+        return;
+    }
+
+    fetch(`/send_invitation?email=${encodeURIComponent(email)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}`)
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message); // Alert the response message
+        })
+        .catch(error => {
+            console.error('Error sending invitation:', error);
+            alert('Failed to send invitation.');
+        });
+}
+
 </script>
 
 </body>

@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            font-family: 'Roboto', sans-serif; /* Using Roboto to match other pages */
+            background: linear-gradient(135deg, #667eea, #764ba2); /* Matching the gradient */
             color: #ffffff;
             height: 100vh;
             display: flex;
@@ -18,19 +19,17 @@
 
         form {
             width: 100%;
-            max-width: 400px;
-            height: 50vh; /* Adjusted for sign-in form */
-            overflow-y: auto; /* Enable scrolling if needed */
+            max-width: 350px;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            background-color: #1a1a2e;
+            background: rgba(26, 26, 46, 0.8); /* Semi-transparent background */
             box-sizing: border-box;
+            text-align: center;
         }
 
         h2 {
-            text-align: center;
-            color: #0abab5;
+            color: #4fd1c5; /* Aqua color for titles */
         }
 
         label {
@@ -49,7 +48,7 @@
         }
 
         button {
-            background-color: #0abab5;
+            background-color: #4fd1c5; /* Matching button colors */
             color: white;
             font-size: 16px;
             text-transform: uppercase;
@@ -59,7 +58,7 @@
         }
 
         button:hover {
-            background-color: #089a9a;
+            background-color: #089a9a; /* Darker shade for hover */
         }
 
         ::placeholder {
@@ -68,7 +67,7 @@
 
         input:focus, button:focus {
             outline: none;
-            border-color: #0abab5;
+            border-color: #4fd1c5;
         }
     </style>
 </head>
@@ -76,7 +75,6 @@
     <form method="post">
         {% csrf_token %}
         <h2>Sign In</h2>
-        {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Log in</button>
     </form>

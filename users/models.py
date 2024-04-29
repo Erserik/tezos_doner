@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 class CustomUser(AbstractUser):
@@ -15,3 +18,11 @@ class CustomUser(AbstractUser):
     blood_group = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True, null=True)
     # Add any additional fields or methods as needed
+
+class Hospital(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+
+class HospitalManager(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)

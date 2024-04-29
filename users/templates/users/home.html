@@ -1,40 +1,36 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <style>
         body {
-            font-family: 'Poppins', sans-serif; /* Используем красивый шрифт Poppins */
-            margin: 0;
-            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #ffffff;
             height: 100vh;
-            background: #000;
-            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            margin: 0;
+            padding-top: 60px;
         }
-
-        .matrix-rain {
-            position: absolute;
-            top: 0;
-            display: block;
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            pointer-events: none;
-            white-space: nowrap;
-            user-select: none;
+        .home-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(26, 26, 46, 0.9);
+            box-sizing: border-box;
+            text-align: center;
+            margin-top: 20px;
         }
-
-        @keyframes fall {
-            from { transform: translateY(-100vh); }
-            to { transform: translateY(100vh); }
-        }
-
         header {
             width: 100%;
             padding: 10px 20px;
@@ -45,77 +41,105 @@
             display: flex;
             justify-content: space-between;
             z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
         }
-
-        .home-container {
-            position: relative;
-            top: 60px;
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            z-index: 5;
+        .container {
+            width: 100%;
+            margin-top: 100px;
         }
-
-        .button {
-            background-color: #0abab5;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-left: 10px; /* Добавляем небольшое пространство между кнопками */
-        }
-
-        .button:hover {
-            background-color: #089a9a;
-        }
-
-        .left-buttons, .right-button {
-            display: flex;
-        }
-
-        h2, p {
-            font-weight: 700; /* Делаем заголовок более выразительным */
+        #first-block {
+            margin-top: 100px;
+            padding-top: 100px;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="left-buttons">
-            <!-- Profile button (conditionally displayed) -->
             {% if user.is_authenticated %}
             <a href="{% url 'users:profile' %}" class="button">Profile</a>
             {% endif %}
         </div>
         <div class="right-button">
-            <!-- Sign Up and Sign In buttons (conditionally displayed) -->
             {% if not user.is_authenticated %}
             <a href="{% url 'users:signup' %}" class="button">Sign Up</a>
             <a href="{% url 'users:signin' %}" class="button">Sign In</a>
             {% endif %}
         </div>
     </header>
-    <div class="home-container">
-        <h2>Welcome to Home Page</h2>
-        <p>Exploring the potential of blockchain technology in donorship programs helps ensure transparency and security in data handling.
-            Blockchain technology has the potential to revolutionize donorship programs by enhancing transparency, security, and confidentiality in handling medical data. When individuals contribute their medical information to donorship programs, blockchain technology can be employed to securely store and manage this data.
-        </p>
-    </div>
-    <script>
-        const body = document.body;
-        const numOfColumns = window.innerWidth / 20;
 
-        for (let i = 0; i < numOfColumns; i++) {
-            const column = document.createElement('div');
-            column.className = 'matrix-rain';
-            column.style.left = `${i * 20}px`;
-            column.style.animation = `fall ${Math.random() * 10 + 5}s linear infinite`;
-            column.textContent = Array.from({length: 100}, () => Math.round(Math.random())).join('');
-            body.appendChild(column);
-        }
-    </script>
+    <div id="first-block">
+        <section class="our_ability section_padding" id="first-block">
+            <div class="container" id="first-block">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-md-6 col-lg-6">
+                        <div class="our_ability_img">
+                            <img src="{% static 'img/ability_img.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-5">
+                        <div class="our_ability_member_text">
+                            <h2>Welcome to the Blood Donor Blockchain Platform</h2>
+                            <p>Welcome to Our Future of Blood Donation. Explore how blockchain technology is revolutionizing blood donations. Our platform leverages blockchain to enhance the transparency and security of medical data management, ensuring every donor's privacy and safety. Join our community to make a difference with every donation, secured by cutting-edge technology.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="feature-area section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-feature text-center item-padding">
+                        <img src="{% static 'img/feature1.png' %}" alt="">
+                        <h3>advance technology</h3>
+                        <p>Creeping for female light years that lesser can't evening heaven isn't bearing tree appear.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-feature text-center item-padding mt-4 mt-md-0">
+                        <img src="{% static 'img/feature2.png' %}" alt="">
+                        <h3>comfortable place</h3>
+                        <p>Creeping for female light years that lesser can't evening heaven isn't bearing tree appear.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-feature text-center item-padding mt-4 mt-lg-0">
+                        <img src="{% static 'img/feature3.png' %}" alt="">
+                        <h3>quality equipment</h3>
+                        <p>Creeping for female light years that lesser can't evening heaven isn't bearing tree appear.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-feature text-center item-padding mt-4 mt-lg-0">
+                        <img src="{% static 'img/feature4.png' %}" alt="">
+                        <h3>friendly staff</h3>
+                        <p>Creeping for female light years that lesser can't evening heaven isn't bearing tree appear.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="top_service our_ability padding_bottom">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md-5 col-lg-5">
+                    <div class="our_ability_member_text">
+                        <h2>Innovative Blockchain Integration</h2>
+                        <p>At the heart of our mission is a steadfast commitment to our donors. We prioritize your health and comfort, ensuring that each donation experience is safe, seamless, and secure. With state-of-the-art facilities, we integrate blockchain technology to safeguard your personal data, while also streamlining the donation process.</p>
+                        <a href="#" class="btn_2">read more</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="our_ability_img">
+                        <img src="{% static 'img/top_service.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>

@@ -11,9 +11,9 @@ urlpatterns = [
     path('save_form/', views.saveprofile, name='save_form'),
     path('search_users/', views.search_users, name='search_users'),
     path('', views.home, name='home'),
+    path('send_invitation', views.send_invitation, name='send_invitation'),
+
 ]
 
-urlpatterns += [
-    # path('home', views.home, name='home'),
-]
+
 

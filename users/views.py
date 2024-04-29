@@ -3,6 +3,8 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout, get_user_model
+from .models import Hospital, HospitalManager
+
 from django.db.models import Q
 from .forms import SignUpForm, LoginForm
 
@@ -28,7 +30,7 @@ def search_users(request):
             Q(description__icontains=query)
         )
         print("Найдено пользователей:", len(users))  # Отладочная печать
-        results = [{'name': user.name, 'last_name': user.last_name, 'email': user.email} for user in users]
+        results = [{'name': user.name, 'last_name': user.last_name, 'email': user.email, 'blood_group': user.blood_group} for user in users]
         return JsonResponse({'results': results})
     else:
         return JsonResponse({'results': []})
@@ -118,4 +120,21 @@ def profile(request):
 def saveprofile(request):
     return render(request, 'users/saveprofileform.html')
 
+from django.http import JsonResponse
 
+def send_invitation(request):
+    email = request.GET.get('email', '')
+    date = request.GET.get('date', '')
+    time = request.GET.get('time', '')
+    user = request.user
+    hospital_manager = HospitalManager.objects.get(user=user)
+    hospital = hospital_manager.hospital
+
+    send_mail(
+        'Invitation to Hospital Visit',
+        f"Dear Client,\n\nWe are pleased to invite you to Hospital {hospital.name}, located at {hospital.address}, on {date} at {time} for a blood donation session. Your participation is crucial to help those in need.\n\nBest regards,\n{hospital.name} Team",
+        'from@example.com',
+        [email],
+        fail_silently=False,
+    )
+    return JsonResponse({'message': f'Invitation sent successfully to {email} for {date} at {time}'})
