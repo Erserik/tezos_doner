@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #1a1a2e;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0abab5;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: #ccc;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0a0a16;
+            color: #ffffff;
+        }
+
+        button {
+            background-color: #0abab5;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #089a9a;
+        }
+    </style>
+    <script>
+        function loadTimeSlots() {
+            const hospitalSelect = document.getElementById('id_hospital');
+            const dateInput = document.getElementById('id_date');
+            const timeSlotSelect = document.getElementById('id_timeslot');
+
+            if (hospitalSelect.value && dateInput.value) {
+                fetch(`/load_timeslots?hospital=${hospitalSelect.value}&date=${dateInput.value}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+                        data.forEach(timeslot => {
+                            const option = document.createElement('option');
+                            option.value = timeslot.id;
+                            option.text = `${timeslot.start_time} - ${timeslot.end_time}`;
+                            timeSlotSelect.appendChild(option);
+                        });
+                    });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('id_hospital').addEventListener('change', loadTimeSlots);
+            document.getElementById('id_date').addEventListener('change', loadTimeSlots);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Book a Blood Donation Appointment</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div id="timeslot-container" style="display: none;">
+                <label for="id_timeslot">Time Slot:</label>
+                <select id="id_timeslot" name="timeslot"></select>
+            </div>
+            <button type="submit">Book Appointment</button>
+        </form>
+        {% if booking_form %}
+        <form method="post" action="{% url 'users:confirm_appointment' %}">
+            {% csrf_token %}
+            {{ booking_form.as_p }}
+            <button type="submit">Confirm Appointment</button>
+        </form>
+        {% endif %}
+    </div>
+</body>
+</html>

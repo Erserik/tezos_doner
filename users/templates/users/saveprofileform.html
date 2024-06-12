@@ -5,179 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Search</title>
     <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(145deg, #1a1a2e, #16213e);
-        color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        margin-top: 5em;
-        align-items: center;
-        height: 100vh;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            margin-top: 5em;
+            align-items: center;
+            height: 100vh;
+        }
 
-    }
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: #1a1a2e;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
 
-    .search-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        max-width: 500px;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        background-color: #1a1a2e;
-        box-sizing: border-box;
-        margin-bottom: 20px; /* Add margin to separate from search results */
-    }
+        h2 {
+            text-align: center;
+            color: #0abab5;
+            margin-bottom: 20px;
+        }
 
-    h2 {
-        text-align: center;
-        color: #0abab5;
-        margin-bottom: 20px;
-    }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #ccc;
+        }
 
-    label {
-        display: block;
-        margin-top: 15px;
-        color: #ccc;
-    }
+        input[type="text"], input[type="date"], input[type="time"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+            background-color: #0a0a16;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
 
-    input[type="text"] {
-        width: calc(100% - 20px);
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: none;
-        background-color: #0a0a16;
-        color: #ffffff;
-        box-sizing: border-box;
-    }
+        button[type="submit"], button[type="button"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0abab5;
+            color: #ffffff;
+            font-size: 16px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    button[type="submit"] {
-        width: 100%;
-        padding: 10px;
-        margin-top: 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #0abab5;
-        color: #ffffff;
-        font-size: 16px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+        button[type="submit"]:hover, button[type="button"]:hover {
+            background-color: #089a9a;
+        }
 
-    button[type="submit"]:hover {
-        background-color: #089a9a;
-    }
+        ::placeholder {
+            color: #666;
+        }
 
-    ::placeholder {
-        color: #666;
-    }
+        input:focus,
+        button:focus {
+            outline: none;
+            border-color: #0abab5;
+        }
 
-    input:focus,
-    button:focus {
-        outline: none;
-        border-color: #0abab5;
-    }
+        #searchResults {
+            text-align: center;
+            margin-top: 10px;
+        }
 
-    #searchResults {
-        text-align: center;
-        margin-top: 10px;
-    }
+        #searchResults ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-    #searchResults ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+        #searchResults li {
+            margin-bottom: 10px;
+        }
 
-    #searchResults li {
-        margin-bottom: 10px;
-    }
-</style>
+        #searchResults button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0abab5;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
+        #searchResults button:hover {
+            background-color: #089a9a;
+        }
+    </style>
 </head>
 <body>
-    <form id="searchForm">
-        <h2>User Search</h2>
-        <label for="query">Search:</label>
-        <input type="text" id="query" name="query" placeholder="Поиск" required>
-        <button type="submit">Search</button>
-    </form>
+    <div class="search-container">
+        <form id="searchForm">
+            <h2>User Search</h2>
+            <label for="query">Search:</label>
+            <input type="text" id="query" name="query" placeholder="Search">
+            <label for="blood_group">Blood Group:</label>
+            <input type="text" id="blood_group" name="blood_group" placeholder="Blood Group">
+            <button type="submit">Search</button>
+        </form>
 
-    <div id="searchResults">
+        <div id="searchResults"></div>
     </div>
 
-<script>
-    const searchForm = document.getElementById('searchForm');
-    const searchInput = document.getElementById('query');
-    const searchResults = document.getElementById('searchResults');
+    <script>
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('query');
+        const bloodGroupInput = document.getElementById('blood_group');
+        const searchResults = document.getElementById('searchResults');
 
-    searchForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+        searchForm.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-        const query = searchInput.value.trim();
+            const query = searchInput.value.trim();
+            const bloodGroup = bloodGroupInput.value.trim();
 
-        fetch(`/search_users?query=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-                displaySearchResults(data.results);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                searchResults.innerHTML = '<p>Error loading results.</p>';
-            });
-    });
-
-   function displaySearchResults(results) {
-    searchResults.innerHTML = '';
-
-    if (results.length === 0) {
-        searchResults.innerHTML = '<p>No results found.</p>';
-        return;
-    }
-
-    const resultList = document.createElement('ul');
-
-    results.forEach(result => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `Name: ${result.name}, Blood_group: ${result.blood_group}`;
-
-        const inviteButton = document.createElement('button');
-        inviteButton.textContent = 'Invite';
-        inviteButton.onclick = function() {
-            sendInvitation(result.email);
-        };
-
-        listItem.appendChild(inviteButton);
-        resultList.appendChild(listItem);
-    });
-
-    searchResults.appendChild(resultList);
-}
-
-function sendInvitation(email) {
-    const date = prompt("Please enter a date for the appointment (YYYY-MM-DD):");
-    const time = prompt("Please enter a time for the appointment (HH:MM):");
-
-    if (!date || !time) {
-        alert("You must specify both date and time.");
-        return;
-    }
-
-    fetch(`/send_invitation?email=${encodeURIComponent(email)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}`)
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message); // Alert the response message
-        })
-        .catch(error => {
-            console.error('Error sending invitation:', error);
-            alert('Failed to send invitation.');
+            fetch(`/search_users?query=${encodeURIComponent(query)}&blood_group=${encodeURIComponent(bloodGroup)}`)
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data.results);
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    searchResults.innerHTML = '<p>Error loading results.</p>';
+                });
         });
-}
 
-</script>
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
 
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p>No results found.</p>';
+                return;
+            }
+
+            const resultList = document.createElement('ul');
+
+            results.forEach(result => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Name: ${result.name}, Blood group: ${result.blood_group}`;
+
+                const inviteButton = document.createElement('button');
+                inviteButton.textContent = 'Invite';
+                inviteButton.onclick = function() {
+                    sendInvitation(result.email, result.blood_group);
+                };
+
+                listItem.appendChild(inviteButton);
+                resultList.appendChild(listItem);
+            });
+
+            searchResults.appendChild(resultList);
+        }
+
+        function sendInvitation(email, bloodGroup) {
+            const date = prompt("Please enter a date for the appointment (YYYY-MM-DD):");
+            const time = prompt("Please enter a time for the appointment (HH:MM):");
+
+            if (!date || !time) {
+                alert("You must specify both date and time.");
+                return;
+            }
+
+            fetch(`/send_invitation?email=${encodeURIComponent(email)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&blood_group=${encodeURIComponent(bloodGroup)}`)
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error sending invitation:', error);
+                    alert('Failed to send invitation.');
+                });
+        }
+    </script>
 </body>
 </html>

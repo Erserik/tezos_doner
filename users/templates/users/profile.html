@@ -44,7 +44,7 @@
             font-weight: 500;
         }
 
-        .home-button {
+        .home-button, .logout-button, .invite-button {
             background-color: #4fd1c5;
             color: #fff;
             border: none;
@@ -53,18 +53,6 @@
             transition: background-color 0.3s ease;
             text-decoration: none;
             padding: 10px 20px;
-        }
-
-        .logout-button {
-            background-color: #4fd1c5;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            padding: 10px 20px;
-
         }
 
         .home-button {
@@ -78,22 +66,56 @@
             top: 20px;
             right: 20px;
         }
+
+        .wallet-balance {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .wallet-balance img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .invite-button {
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
     <a href="{% url 'users:home' %}" class="home-button">Home</a>
     <div class="profile-container">
         <h2>User Profile</h2>
-        <p>First Name: <span class="user-info">{{ user.name }}</span></p>
-        <p>Last Name: <span class="user-info">{{ user.last_name }}</span></p>
-        <p>Email: <span class="user-info">{{ user.email }}</span></p>
-        <p>IIN Number: <span class="user-info">{{ user.iin_number }}</span></p>
-        <p>Age: <span class="user-info">{{ user.age }}</span></p>
-        <p>Height: <span class="user-info">{{ user.height }} cm</span></p>
-        <p>Weight: <span class="user-info">{{ user.weight }} kg</span></p>
-        <p>Blood Group: <span class="user-info">{{ user.blood_group }}</span></p>
-        <p>Description: <span class="user-info">{{ user.description }}</span></p>
-        <p>Blockchain <a href="https://better-call.dev/mainnet/{{user.blockchain_contract_id}}" style="color: #4fd1c5;">GO</a></p>
+        {% if user.is_superuser or user.hospitalmanager_set.exists %}
+            <p>Hospital Name: <span class="user-info">{{ user.hospitalmanager.hospital.name }}</span></p>
+            <p>Hospital Address: <span class="user-info">{{ user.hospitalmanager.hospital.address }}</span></p>
+            <p>Username: <span class="user-info">{{ user.username }}</span></p>
+            <a href="{% url 'users:invite_person' %}" class="invite-button">Invite Person</a>
+        {% else %}
+            <p>First Name: <span class="user-info">{{ user.name }}</span></p>
+            <p>Last Name: <span class="user-info">{{ user.last_name }}</span></p>
+            <p>Email: <span class="user-info">{{ user.email }}</span></p>
+            <p>IIN Number: <span class="user-info">{{ user.iin_number }}</span></p>
+            <p>Age: <span class="user-info">{{ user.age }}</span></p>
+            <p>Height: <span class="user-info">{{ user.height }} cm</span></p>
+            <p>Weight: <span class="user-info">{{ user.weight }} kg</span></p>
+            <p>Blood Group: <span class="user-info">{{ user.blood_group }}</span></p>
+            <p>Description: <span class="user-info">{{ user.description }}</span></p>
+            <p>Blockchain <a href="https://better-call.dev/mainnet/{{user.blockchain_contract_id}}" style="color: #4fd1c5;">GO</a></p>
+            <!-- Wallet Balance Section -->
+            <div class="wallet-balance">
+                <img src="https://cryptologos.cc/logos/tezos-xtz-logo.png" alt="Tezos Logo">
+                <span>Balance: <span class="user-info">{{ user.wallet_balance }} XTZ</span></span>
+            </div>
+        {% endif %}
     </div>
     <!-- Logout button -->
     <a href="{% url 'users:signout' %}" class="logout-button">Log Out</a>

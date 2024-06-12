@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Invitations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>Invitations</h2>
+    <form method="GET">
+        <label for="date">Filter by Date:</label>
+        <input type="date" id="date" name="date">
+        <label for="blood_group">Filter by Blood Group:</label>
+        <input type="text" id="blood_group" name="blood_group">
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Blood Group</th>
+                <th>Invited User</th>
+                <th>Sent By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invitation in invitations %}
+                <tr>
+                    <td>{{ invitation.email }}</td>
+                    <td>{{ invitation.date }}</td>
+                    <td>{{ invitation.time }}</td>
+                    <td>{{ invitation.blood_group }}</td>
+                    <td>{{ invitation.invited_user.username }}</td>
+                    <td>{{ invitation.sent_by.username }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
